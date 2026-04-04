@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Collection — Umbra Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-void:#050507;--bg-deep:#09090d;--bg-surface:#0f0f15;
+  --bg-card:#121219;--text-primary:#eae9ed;--text-secondary:#8a8898;
+  --text-muted:#555363;--accent:#996515;
+  --accent-dim:rgba(167,139,250,0.08);--accent-border:rgba(167,139,250,0.12);
+  --accent-glow:rgba(167,139,250,0.25);
+  --radius-sm:8px;--radius-md:14px;--radius-lg:20px;--radius-xl:28px;--radius-full:9999px;
+  --font-display:Syne,sans-serif;--font-serif:'Playfair Display',serif;
+  --font-heading:'Space Grotesk',sans-serif;--font-body:Inter,sans-serif;
+  --ease-out-expo:cubic-bezier(0.16,1,0.3,1);
+  --ease-out-back:cubic-bezier(0.34,1.56,0.64,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px;scrollbar-width:thin;scrollbar-color:var(--accent) var(--bg-deep)}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg-deep)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:var(--radius-full)}
+body{font-family:var(--font-body);background:var(--bg-void);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}button{font-family:inherit}
+img{max-width:100%;display:block}ul{list-style:none}
+::selection{background:var(--accent);color:var(--bg-void)}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1.1rem 2.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(5,5,7,0.92);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--accent-border)}
+.nav-logo{font-family:var(--font-serif);font-weight:700;font-size:1.05rem;color:var(--text-primary);display:flex;align-items:center;gap:.6rem}
+.nav-logo svg{width:28px;height:28px}
+.nav-links{display:flex;align-items:center;gap:2rem}
+.nav-links a{font-family:var(--font-heading);font-size:.8rem;font-weight:500;color:var(--text-secondary);letter-spacing:.04em;text-transform:uppercase;transition:color .3s}
+.nav-links a:hover{color:var(--text-primary)}
+.nav-cta{background:var(--accent)!important;color:var(--bg-void)!important;padding:.5rem 1.2rem!important;border-radius:var(--radius-full)!important;font-weight:600!important}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:8px;z-index:1001}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--text-primary);border-radius:var(--radius-full);transition:all .4s var(--ease-out-expo);transform-origin:center}
+.hamburger.on span:nth-child(1){transform:rotate(45deg) translate(4.5px,4.5px)}
+.hamburger.on span:nth-child(2){opacity:0}
+.hamburger.on span:nth-child(3){transform:rotate(-45deg) translate(4.5px,-4.5px)}
+@media(max-width:768px){
+  .hamburger{display:flex}
+  .nav{padding:.9rem 1.5rem}
+  .nav-links{position:fixed;inset:0;background:rgba(5,5,7,0.97);backdrop-filter:blur(30px);flex-direction:column;justify-content:center;gap:2.5rem;opacity:0;pointer-events:none;transition:opacity .5s var(--ease-out-expo)}
+  .nav-links.open{opacity:1;pointer-events:all}
+  .nav-links a{font-size:1.3rem;text-transform:none}
+}
+
+/* PAGE HERO */
+.pg-hero{position:relative;padding:10rem 2rem 5rem;text-align:center;overflow:hidden}
+.pg-hero::before{
+  content:'';position:absolute;top:-30%;left:-10%;width:60%;height:60%;
+  background:radial-gradient(ellipse,rgba(167,139,250,0.04),transparent 70%);
+  animation:drift 22s ease-in-out infinite;
+}
+@keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(6%,10%)}}
+.pg-hero-back{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-family:var(--font-heading);font-size:.75rem;font-weight:600;
+  color:var(--accent);letter-spacing:.05em;text-transform:uppercase;
+  margin-bottom:2rem;transition:gap .3s;position:relative;z-index:1;
+}
+.pg-hero-back:hover{gap:.7rem}
+.pg-hero h1{
+  font-family:var(--font-serif);font-size:clamp(3rem,7vw,5.5rem);
+  font-weight:900;line-height:.95;color:var(--text-primary);
+  margin-bottom:1rem;position:relative;z-index:1;
+}
+.pg-hero h1 em{font-style:italic;font-weight:400;color:var(--text-secondary)}
+.pg-hero p{
+  font-size:1.15rem;font-weight:300;color:var(--text-secondary);
+  max-width:580px;margin:0 auto;line-height:1.7;position:relative;z-index:1;
+}
+.pg-hero-count{
+  display:inline-flex;align-items:center;gap:.6rem;
+  margin-top:2.5rem;font-family:var(--font-heading);font-size:.72rem;
+  font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text-muted);position:relative;z-index:1;
+}
+.pg-hero-count .num{
+  font-family:var(--font-display);font-size:1.8rem;font-weight:800;
+  color:var(--accent);letter-spacing:0;line-height:1;
+}
+
+/* SIDE NAV (TABLE OF CONTENTS) */
+.side-nav{
+  position:fixed;right:2rem;top:50%;transform:translateY(-50%);
+  z-index:900;display:flex;flex-direction:column;gap:.6rem;
+}
+.side-nav-dot{
+  width:10px;height:10px;border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.15);background:transparent;
+  transition:all .3s var(--ease-out-expo);cursor:pointer;
+  position:relative;
+}
+.side-nav-dot.active{border-color:var(--accent);background:var(--accent)}
+.side-nav-dot:hover{border-color:var(--accent)}
+.side-nav-dot .side-nav-label{
+  position:absolute;right:calc(100% + .75rem);top:50%;transform:translateY(-50%);
+  font-family:var(--font-heading);font-size:.65rem;font-weight:600;
+  color:var(--text-muted);white-space:nowrap;
+  opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.side-nav-dot:hover .side-nav-label{opacity:1}
+.side-nav-dot.active .side-nav-label{opacity:1;color:var(--accent)}
+@media(max-width:1100px){.side-nav{display:none}}
+
+/* ===== ARTWORK SECTION ===== */
+.art-section{
+  padding:0;border-top:1px solid rgba(255,255,255,.04);
+  scroll-margin-top:70px;
+}
+.art-section:nth-child(even){background:var(--bg-deep)}
+
+.art-inner{
+  display:grid;grid-template-columns:1fr 1fr;
+  min-height:90vh;
+}
+.art-section:nth-child(even) .art-inner{direction:rtl}
+.art-section:nth-child(even) .art-inner > *{direction:ltr}
+
+@media(max-width:868px){
+  .art-inner{grid-template-columns:1fr;min-height:auto}
+  .art-section:nth-child(even) .art-inner{direction:ltr}
+}
+
+/* IMAGE SIDE */
+.art-img-side{position:relative;overflow:hidden;cursor:pointer}
+.art-img-side img{
+  width:100%;height:100%;object-fit:cover;min-height:500px;
+  transition:transform 1.2s var(--ease-out-expo),filter .6s;
+  filter:brightness(.8) saturate(1.05);
+}
+@media(max-width:868px){.art-img-side img{min-height:350px}}
+.art-img-side:hover img{transform:scale(1.05);filter:brightness(.9) saturate(1.15)}
+
+.art-img-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(5,5,7,.25),transparent 60%);
+  pointer-events:none;
+}
+.art-img-zoom{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(5,5,7,.3);opacity:0;transition:opacity .4s;pointer-events:none;
+}
+.art-img-zoom span{
+  width:56px;height:56px;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;background:rgba(167,139,250,.15);backdrop-filter:blur(10px);
+  border:1px solid rgba(167,139,250,.3);color:#fff;font-size:1rem;
+}
+.art-img-side:hover .art-img-zoom{opacity:1}
+
+.art-num{
+  position:absolute;bottom:1.5rem;left:2rem;z-index:2;
+  font-family:var(--font-display);font-size:clamp(4rem,10vw,8rem);
+  font-weight:900;color:rgba(255,255,255,.04);
+  user-select:none;pointer-events:none;line-height:1;
+}
+
+/* TEXT SIDE */
+.art-text-side{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:4rem 3.5rem;position:relative;
+}
+@media(max-width:868px){.art-text-side{padding:2.5rem 1.75rem}}
+
+.art-text-side::before{
+  content:'';position:absolute;top:15%;width:1px;height:70%;
+  background:var(--accent-border);
+}
+.art-section:nth-child(odd) .art-text-side::before{left:0}
+.art-section:nth-child(even) .art-text-side::before{right:0}
+@media(max-width:868px){
+  .art-text-side::before{left:0!important;right:auto!important}
+}
+
+.art-medium-tag{
+  font-family:var(--font-heading);font-size:.65rem;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+  margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;
+}
+.art-medium-tag::before{content:'';width:16px;height:1px;background:var(--accent);opacity:.5}
+
+.art-title{
+  font-family:var(--font-serif);font-size:clamp(1.8rem,3.2vw,2.8rem);
+  font-weight:900;line-height:1.1;color:var(--text-primary);margin-bottom:.3rem;
+}
+.art-title em{font-style:italic;font-weight:400;color:var(--text-secondary)}
+
+.art-artist{
+  font-family:var(--font-heading);font-size:.85rem;font-weight:500;
+  color:var(--text-muted);margin-bottom:1.5rem;
+}
+
+.art-body{
+  font-size:.95rem;font-weight:300;color:var(--text-secondary);
+  line-height:1.85;margin-bottom:1.5rem;
+}
+
+.art-pullquote{
+  display:block;font-family:var(--font-serif);font-size:1.1rem;
+  font-style:italic;color:var(--text-primary);line-height:1.6;
+  padding:1.25rem 0 1.25rem 1.25rem;margin:1.25rem 0;
+  border-left:2px solid var(--accent);font-weight:400;
+}
+
+.art-details{
+  display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:1.5rem;
+  padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.05);
+}
+.art-detail{display:flex;flex-direction:column;gap:.15rem}
+.art-detail-label{
+  font-family:var(--font-heading);font-size:.6rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);
+}
+.art-detail-value{
+  font-family:var(--font-serif);font-size:.9rem;font-weight:600;
+  color:var(--text-primary);
+}
+
+/* SECTION DIVIDER */
+.sec-divider{
+  display:flex;align-items:center;justify-content:center;
+  padding:.75rem 2rem;background:var(--bg-void);
+}
+.sec-divider-inner{display:flex;align-items:center;gap:1.25rem}
+.sec-divider-line{width:50px;height:1px;background:rgba(255,255,255,.06)}
+.sec-divider-diamond{width:6px;height:6px;background:var(--accent);transform:rotate(45deg);opacity:.3}
+
+/* CTA BOTTOM */
+.coll-cta{
+  text-align:center;padding:6rem 2rem;background:var(--bg-deep);
+}
+.coll-cta h2{
+  font-family:var(--font-serif);font-size:clamp(2rem,4vw,3rem);
+  font-weight:900;margin-bottom:.75rem;color:var(--text-primary);
+}
+.coll-cta p{
+  font-size:1.05rem;font-weight:300;color:var(--text-secondary);
+  max-width:460px;margin:0 auto 2rem;line-height:1.7;
+}
+.btn{
+  font-family:var(--font-heading);font-size:.85rem;font-weight:600;
+  padding:.85rem 2rem;border:none;border-radius:var(--radius-full);
+  display:inline-flex;align-items:center;gap:.5rem;
+  transition:all .4s var(--ease-out-expo);letter-spacing:.03em;
+  text-transform:uppercase;cursor:pointer;
+}
+.btn-fill{background:var(--accent);color:var(--bg-void)}
+.btn-fill:hover{transform:translateY(-3px);box-shadow:0 12px 30px var(--accent-glow)}
+.btn-ghost{background:transparent;color:var(--text-primary);border:1px solid rgba(255,255,255,.12)}
+.btn-ghost:hover{border-color:var(--accent);background:var(--accent-dim)}
+.cta-btns{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
+
+/* FOOTER */
+.footer{padding:2.5rem 2rem;border-top:1px solid rgba(255,255,255,.04);text-align:center}
+.footer-copy{font-size:.75rem;color:var(--text-muted)}
+
+/* LIGHTBOX */
+.lb{position:fixed;inset:0;z-index:100000;background:rgba(3,3,5,.97);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);display:flex;align-items:center;justify-content:center;padding:2rem;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .5s var(--ease-out-expo),visibility .5s}
+.lb.open{opacity:1;visibility:visible;pointer-events:all}
+.lb img{max-width:92vw;max-height:88vh;object-fit:contain;border-radius:var(--radius-md);box-shadow:0 30px 80px rgba(0,0,0,.6);transform:scale(.92);transition:transform .6s var(--ease-out-expo)}
+.lb.open img{transform:scale(1)}
+.lb-close{position:fixed;top:1.5rem;right:1.5rem;z-index:100001;width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:50%;color:var(--text-primary);font-size:1.2rem;cursor:pointer;transition:all .3s;opacity:0}
+.lb.open .lb-close{opacity:1}
+.lb-close:hover{background:var(--accent);color:var(--bg-void);border-color:var(--accent)}
+.lb-esc{position:fixed;top:1.75rem;left:1.5rem;z-index:100001;font-family:var(--font-heading);font-size:.65rem;color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:.5rem;opacity:0;transition:opacity .5s}
+.lb.open .lb-esc{opacity:1;transition-delay:.3s}
+.lb-esc kbd{padding:.2rem .5rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:4px;font-family:var(--font-heading);font-size:.6rem}
+@media(max-width:768px){.lb{padding:1rem}.lb-close{top:1rem;right:1rem;width:42px;height:42px}.lb-esc{display:none}}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(40px);transition:opacity .85s var(--ease-out-expo),transform .85s var(--ease-out-expo)}
+.rv.vis{opacity:1;transform:translateY(0)}
+.rv-d1{transition-delay:.1s}.rv-d2{transition-delay:.2s}
+
+/* ====== ECLIPSE COLLECTION ====== */
+.eclipse{position:relative;overflow:hidden}
+
+/* ECLIPSE HERO / INTRO */
+.eclipse-intro{
+  position:relative;padding:10rem 2rem 6rem;text-align:center;
+  overflow:hidden;
+  background:linear-gradient(to bottom,var(--bg-void),#08080e,var(--bg-void));
+}
+.eclipse-intro::before{
+  content:'';position:absolute;
+  top:50%;left:50%;width:500px;height:500px;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(167,139,250,.03) 0%,transparent 70%);
+  pointer-events:none;
+}
+/* Decorative ring */
+.eclipse-intro::after{
+  content:'';position:absolute;
+  top:50%;left:50%;width:300px;height:300px;
+  transform:translate(-50%,-50%);
+  border:1px solid rgba(167,139,250,.06);
+  border-radius:50%;pointer-events:none;
+  animation:eclipseRing 20s linear infinite;
+}
+@keyframes eclipseRing{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+.eclipse-eyebrow{
+  font-family:var(--font-heading);font-size:.6rem;font-weight:600;
+  letter-spacing:.3em;text-transform:uppercase;color:var(--text-muted);
+  margin-bottom:2rem;display:block;position:relative;z-index:1;
+}
+
+.eclipse-main-title{
+  font-family:var(--font-serif);font-size:clamp(3rem,8vw,7rem);
+  font-weight:900;line-height:.9;color:var(--text-primary);
+  margin-bottom:.5rem;position:relative;z-index:1;
+  letter-spacing:-.03em;
+}
+.eclipse-main-title em{
+  font-style:italic;font-weight:400;
+  color:var(--accent);display:block;
+  font-size:.45em;letter-spacing:.08em;
+  margin-top:.5rem;
+}
+
+.eclipse-byline{
+  font-family:var(--font-heading);font-size:.72rem;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text-muted);margin:2rem 0 3rem;
+  position:relative;z-index:1;
+  display:flex;align-items:center;justify-content:center;gap:1rem;
+}
+.eclipse-byline::before,.eclipse-byline::after{
+  content:'';width:40px;height:1px;background:rgba(255,255,255,.08);
+}
+
+.eclipse-manifesto{
+  font-family:var(--font-body);font-size:1.05rem;font-weight:300;
+  color:var(--text-secondary);max-width:620px;margin:0 auto;
+  line-height:1.85;position:relative;z-index:1;
+}
+.eclipse-manifesto strong{
+  color:var(--text-primary);font-weight:500;
+}
+
+/* ECLIPSE DIVIDER */
+.eclipse-divider{
+  display:flex;align-items:center;justify-content:center;
+  padding:4rem 2rem;
+}
+.eclipse-divider-line{width:1px;height:80px;background:linear-gradient(to bottom,transparent,rgba(167,139,250,.15),transparent)}
+
+/* ====== ECLIPSE PIECE ====== */
+.eclipse-piece{
+  display:grid;grid-template-columns:1fr 1fr;
+  min-height:80vh;position:relative;
+  border-top:1px solid rgba(255,255,255,.03);
+}
+.eclipse-piece:nth-child(even){direction:rtl}
+.eclipse-piece:nth-child(even) > *{direction:ltr}
+
+@media(max-width:868px){
+  .eclipse-piece{grid-template-columns:1fr;min-height:auto}
+  .eclipse-piece:nth-child(even){direction:ltr}
+}
+
+/* IMAGE SIDE */
+.eclipse-img{
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  padding:3rem;
+  background:linear-gradient(135deg,#07070c,#0c0c14);
+}
+
+.eclipse-img-frame{
+  position:relative;width:100%;max-width:480px;
+  border-radius:var(--radius-md);overflow:hidden;
+  border:1px solid rgba(255,255,255,.06);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.5),
+    0 0 0 1px rgba(255,255,255,.02),
+    0 0 120px rgba(167,139,250,.03);
+  transition:all .8s var(--ease-out-expo);
+  cursor:pointer;
+}
+.eclipse-img-frame:hover{
+  border-color:var(--accent-border);
+  box-shadow:
+    0 40px 100px rgba(0,0,0,.6),
+    0 0 0 1px rgba(167,139,250,.1),
+    0 0 150px rgba(167,139,250,.05);
+  transform:translateY(-6px);
+}
+.eclipse-img-frame img{
+  width:100%;aspect-ratio:4/5;object-fit:cover;
+  transition:transform 1.2s var(--ease-out-expo),filter .6s;
+  filter:brightness(.9) saturate(1.05);
+}
+.eclipse-img-frame:hover img{
+  transform:scale(1.04);
+  filter:brightness(1) saturate(1.1);
+}
+
+/* Frame zoom hint */
+.eclipse-img-frame .ez-hint{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(5,5,7,.35);opacity:0;transition:opacity .4s;pointer-events:none;
+}
+.eclipse-img-frame .ez-hint span{
+  width:48px;height:48px;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;background:rgba(167,139,250,.12);backdrop-filter:blur(10px);
+  border:1px solid rgba(167,139,250,.25);color:#fff;font-size:.85rem;
+}
+.eclipse-img-frame:hover .ez-hint{opacity:1}
+
+/* Piece number watermark behind image */
+.eclipse-img-num{
+  position:absolute;
+  font-family:var(--font-display);font-size:clamp(8rem,20vw,16rem);
+  font-weight:900;color:rgba(255,255,255,.015);
+  user-select:none;pointer-events:none;line-height:1;
+  z-index:0;
+}
+.eclipse-piece:nth-child(odd) .eclipse-img-num{bottom:1rem;right:2rem}
+.eclipse-piece:nth-child(even) .eclipse-img-num{bottom:1rem;left:2rem}
+
+@media(max-width:868px){
+  .eclipse-img{padding:2rem 1.5rem}
+  .eclipse-img-num{font-size:7rem!important}
+}
+
+/* TEXT SIDE */
+.eclipse-text{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:4rem 4rem 4rem 3.5rem;position:relative;
+}
+.eclipse-piece:nth-child(even) .eclipse-text{
+  padding:4rem 3.5rem 4rem 4rem;
+}
+@media(max-width:868px){
+  .eclipse-text{padding:2.5rem 1.75rem!important}
+}
+
+/* Vertical accent line */
+.eclipse-text::before{
+  content:'';position:absolute;top:20%;width:1px;height:60%;
+  background:linear-gradient(to bottom,transparent,rgba(167,139,250,.1),transparent);
+}
+.eclipse-piece:nth-child(odd) .eclipse-text::before{left:0}
+.eclipse-piece:nth-child(even) .eclipse-text::before{right:0}
+@media(max-width:868px){
+  .eclipse-text::before{left:0!important;right:auto!important}
+}
+
+.eclipse-piece-label{
+  font-family:var(--font-heading);font-size:.6rem;font-weight:600;
+  letter-spacing:.25em;text-transform:uppercase;color:var(--text-muted);
+  margin-bottom:.75rem;
+}
+
+.eclipse-piece-title{
+  font-family:var(--font-serif);font-size:clamp(2.2rem,4vw,3.5rem);
+  font-weight:900;line-height:1;color:var(--text-primary);
+  margin-bottom:.5rem;letter-spacing:-.02em;
+}
+
+.eclipse-piece-sub{
+  font-family:var(--font-heading);font-size:.75rem;font-weight:500;
+  color:var(--accent);letter-spacing:.06em;margin-bottom:2rem;
+  display:flex;align-items:center;gap:.6rem;
+}
+.eclipse-piece-sub::after{
+  content:'';flex:1;height:1px;background:rgba(167,139,250,.1);max-width:80px;
+}
+
+.eclipse-piece-body{
+  font-size:.98rem;font-weight:300;color:var(--text-secondary);
+  line-height:1.9;margin-bottom:1.75rem;
+}
+
+/* Minimal detail strip */
+.eclipse-piece-details{
+  display:flex;gap:2rem;flex-wrap:wrap;
+  padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.04);
+}
+.eclipse-piece-detail{display:flex;flex-direction:column;gap:.1rem}
+.eclipse-piece-detail .edl{
+  font-family:var(--font-heading);font-size:.55rem;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);
+}
+.eclipse-piece-detail .edv{
+  font-family:var(--font-serif);font-size:.88rem;font-weight:600;
+  color:var(--text-primary);
+}
+
+/* ====== ECLIPSE CLOSING ====== */
+.eclipse-closing{
+  text-align:center;padding:6rem 2rem;
+  background:linear-gradient(to bottom,var(--bg-void),#08080e);
+  position:relative;
+}
+.eclipse-closing::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:1px;height:80px;
+  background:linear-gradient(to bottom,transparent,rgba(167,139,250,.12));
+}
+.eclipse-closing-text{
+  font-family:var(--font-serif);font-size:clamp(1.2rem,2.5vw,1.8rem);
+  font-weight:400;font-style:italic;color:var(--text-secondary);
+  max-width:500px;margin:0 auto 2rem;line-height:1.7;
+}
+.eclipse-closing-attr{
+  font-family:var(--font-heading);font-size:.7rem;font-weight:600;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);
+}
+
+/* ECLIPSE SEPARATOR FROM REST OF PAGE */
+.eclipse-separator{
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(167,139,250,.1),transparent);
+  margin:0;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <svg viewBox="0 0 40 40" fill="none"><path d="M20 2L35 10V30L20 38L5 30V10L20 2Z" stroke="#996515" stroke-width="1.5" fill="none"/><circle cx="20" cy="20" r="3.5" fill="#996515"/></svg>
+    Umbra Studios
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#campaigns">Campaigns</a></li>
+    <li><a href="#" style="color:var(--text-primary)">Collection</a></li>
+    <li><a href="index.html#story">About</a></li>
+    <li><a href="index.html#contact" class="nav-cta">Contact</a></li>
+  </ul>
+  <button class="hamburger" id="ham" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- SIDE DOT NAV -->
+<nav class="side-nav" id="side-nav">
+  <a href="#whispers-of-shadow" class="side-nav-dot active"><span class="side-nav-label">Whispers of Shadow</span></a>
+  <a href="#frozen-meridian" class="side-nav-dot"><span class="side-nav-label">Frozen Meridian</span></a>
+  <a href="#fragmented-reality" class="side-nav-dot"><span class="side-nav-label">Fragmented Reality</span></a>
+  <a href="#silent-reverie" class="side-nav-dot"><span class="side-nav-label">Silent Reverie</span></a>
+  <a href="#chromatic-dreams" class="side-nav-dot"><span class="side-nav-label">Chromatic Dreams</span></a>
+  <a href="#ephemeral-bonds" class="side-nav-dot"><span class="side-nav-label">Ephemeral Bonds</span></a>
+  <a href="#gravity-lament" class="side-nav-dot"><span class="side-nav-label">Gravity's Lament</span></a>
+  <a href="#synaptic-bloom" class="side-nav-dot"><span class="side-nav-label">Synaptic Bloom</span></a>
+  <a href="#nocturnal-pulse" class="side-nav-dot"><span class="side-nav-label">Nocturnal Pulse</span></a>
+  <a href="#cathedral-forgotten" class="side-nav-dot"><span class="side-nav-label">Cathedral of the Forgotten</span></a>
+  <a href="#eclipse" class="side-nav-dot"><span class="side-nav-label">Eclipse by Umbra Studios</span></a>
+</nav>
+
+<!-- PAGE HERO -->
+<header class="pg-hero">
+  <a href="index.html" class="pg-hero-back">← Back to Umbra Studios</a>
+  <h1>The <em>Collection</em></h1>
+  <p>Every work in our archive carries a universe within it. Scroll through and let each piece speak on its own terms.</p>
+  <div class="pg-hero-count"><span class="num">10+</span> Works on Display</div>
+</header>
+
+<!-- ========== ARTWORK 1 ========== -->
+<section class="art-section" id="whispers-of-shadow">
+  <div class="art-inner">
+    <div class="art-img-side rv" onclick="openLb('image/index11.jpg')">
+      <img src="image/index11.jpg" alt="Whispers of Shadow">
+      <div class="art-img-overlay"></div>
+      <div class="art-img-zoom"><span>⛶</span></div>
+      <div class="art-num">01</div>
+    </div>
+    <div class="art-text-side">
+      <div class="art-medium-tag rv">Oil on Canvas, 2024</div>
+      <h2 class="art-title rv rv-d1">Whispers <em>of Shadow</em></h2>
+      <div class="art-artist rv rv-d1">Sophia Laurent · Paris, France</div>
+      <p class="art-body rv rv-d2">There are paintings that ask to be seen, and then there are paintings that ask you to listen. "Whispers of Shadow" belongs firmly to the latter — a monumental canvas that pulses with a quiet intensity, as if the pigments themselves are holding their breath. Laurent worked exclusively between 4 AM and dawn, painting in the half-light before the sun broke the horizon.</p>
+      <span class="art-pullquote rv rv-d2">"I didn't choose the shadows — they chose me. Every morning I showed up and they told me what to paint."</span>
+      <p class="art-body rv rv-d2">The canvas is built from over forty layers of translucent oil paint, each applied wet-on-dry over weeks of patient curing. What appears to be solid black reveals constellations of deep violet and burnt umber when viewed closely.</p>
+      <div class="art-details rv rv-d2">
+        <div class="art-detail"><span class="art-detail-label">Dimensions</span><span class="art-detail-value">180 × 240 cm</span></div>
+        <div class="art-detail"><span class="art-detail-label">Year</span><span class="art-detail-value">2024</span></div>
+        <div class="art-detail"><span class="art-detail-label">Edition</span><span class="art-detail-value">Original</span></div>
+        <div class="art-detail"><span class="art-detail-label">Status</span><span class="art-detail-value">Available</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ARTWORK 2 ========== -->
+<section class="art-section" id="frozen-meridian">
+  <div class="art-inner">
+    <div class="art-img-side rv" onclick="openLb('image/index12.jpg')">
+      <img src="image/index12.jpg" alt="Frozen Meridian">
+      <div class="art-img-overlay"></div>
+      <div class="art-img-zoom"><span>⛶</span></div>
+      <div class="art-num">02</div>
+    </div>
+    <div class="art-text-side">
+      <div class="art-medium-tag rv">Large Format Photography, 2024</div>
+      <h2 class="art-title rv rv-d1">Frozen <em>Meridian</em></h2>
+      <div class="art-artist rv rv-d1">James Whitaker · London, UK</div>
+      <p class="art-body rv rv-d2">James Whitaker spent eleven weeks camped at 4,200 meters in the Swiss Alps. "Frozen Meridian" is a single exposure captured at -31°C on 8×10 film — a window of ninety seconds when alpenglow meets the blue hour in a way that defies prediction. He waited nineteen days for this moment.</p>
+      <span class="art-pullquote rv rv-d2">"Mountains don't care about your schedule. You don't find the shot — you earn it by waiting longer than your patience allows."</span>
+      <p class="art-body rv rv-d2">The resulting print has a physical presence that digital captures cannot replicate — a weight, a grain, a dimensionality that makes viewers feel the cold radiating from the surface. Individual ice crystals on the ridge are visible at full scale.</p>
+      <div class="art-details rv rv-d2">
+        <div class="art-detail"><span class="art-detail-label">Dimensions</span><span class="art-detail-value">120 × 180 cm</span></div>
+        <div class="art-detail"><span class="art-detail-label">Year</span><span class="art-detail-value">2024</span></div>
+        <div class="art-detail"><span class="art-detail-label">Edition</span><span class="art-detail-value">1 of 5</span></div>
+        <div class="art-detail"><span class="art-detail-label">Status</span><span class="art-detail-value">Sold Out</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ARTWORK 3 ========== -->
+<section class="art-section" id="fragmented-reality">
+  <div class="art-inner">
+    <div class="art-img-side rv" onclick="openLb('image/index13.jpg')">
+      <img src="image/index13.jpg" alt="Fragmented Reality">
+      <div class="art-img-overlay"></div>
+      <div class="art-img-zoom"><span>⛶</span></div>
+      <div class="art-num">03</div>
+    </div>
+    <div class="art-text-side">
+      <div class="art-medium-tag rv">3D Printed Resin / Digital, 2024</div>
+      <h2 class="art-title rv rv-d1">Fragmented <em>Reality</em></h2>
+      <div class="art-artist rv rv-d1">Elena Rodriguez · Mexico City, Mexico</div>
+      <p class="art-body rv rv-d2">Elena Rodriguez doesn't sculpt — she deconstructs. A hyper-detailed 3D scan of the artist's own face was algorithmically shattered into 2,400 fragments, each printed individually and reassembled to float three millimeters apart — close enough to suggest wholeness, far enough to make the fracture undeniable.</p>
+      <span class="art-pullquote rv rv-d2">"We think identity is solid, but it's just fragments agreeing to stay in formation. I wanted to show what happens when they stop agreeing."</span>
+      <p class="art-body rv rv-d2">Installed in a darkened room with a single rotating spotlight, the sculpture casts fractured shadows that reassemble and dissolve continuously across the walls.</p>
+      <div class="art-details rv rv-d2">
+        <div class="art-detail"><span class="art-detail-label">Dimensions</span><span class="art-detail-value">Variable</span></div>
+        <div class="art-detail"><span class="art-detail-label">Year</span><span class="art-detail-value">2024</span></div>
+        <div class="art-detail"><span class="art-detail-label">Edition</span><span class="art-detail-value">1 of 3</span></div>
+        <div class="art-detail"><span class="art-detail-label">Status</span><span class="art-detail-value">On Loan</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ARTWORK 4 ========== -->
+<section class="art-section" id="silent-reverie">
+  <div class="art-inner">
+    <div class="art-img-side rv" onclick="openLb('image/index14.jpg')">
+      <img src="image/index14.jpg" alt="Silent Reverie">
+      <div class="art-img-overlay"></div>
+      <div class="art-img-zoom"><span>⛶</span></div>
+      <div class="art-num">04</div>
+    </div>
+    <div class="art-text-side">
+      <div class="art-medium-tag rv">Acrylic on Belgian Linen, 2022</div>
+      <h2 class="art-title rv rv-d1">Silent <em>Reverie</em></h2>
+      <div class="art-artist rv rv-d1">Sophia Laurent · Paris, France</div>
+      <p class="art-body rv rv-d2">The painting that made Sophia Laurent impossible to ignore. Created during a residency at the Villa Medici in Rome — an enormous field of luminous violet and magenta built from over sixty coats of acrylic mixed from raw pigments sourced on the Amalfi coast: ground lapis lazuli, crushed cochineal, and hand-processed titanium white.</p>
+      <span class="art-pullquote rv rv-d2">"I wanted to paint a feeling that doesn't have a name yet. The closest word I found was in Japanese — komorebi — the light filtering through leaves."</span>
+      <p class="art-body rv rv-d2">Awarded the Prix Marcel Duchamp in 2023 and permanently acquired by the Centre Pompidou. Critics have described the work as "the visual equivalent of a held breath."</p>
+      <div class="art-details rv rv-d2">
+        <div class="art-detail"><span class="art-detail-label">Dimensions</span><span class="art-detail-value">200 × 150 cm</span></div>
+        <div class="art-detail"><span class="art-detail-label">Year</span><span class="art-detail-value">2022</span></div>
+        <div class="art-detail"><span class="art-detail-label">Edition</span><span class="art-detail-value">Original</span></div>
+        <div class="art-detail"><span class="art-detail-label">Status</span><span class="art-detail-value">Museum Acquired</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ARTWORK 5 ========== -->
+<section class="art-section" id="chromatic-dreams">
+  <div class="art-inner">
+    <div class="art-img-side rv" onclick="openLb('image/index15.jpg')">
+      <img src="image/index15.jpg" alt="Chromatic Dreams">
+      <div class="art-img-overlay"></div>
+      <div class="art-img-zoom"><span>⛶</span></div>
+      <div class="art-num">05</div>
+    </div>
+    <div class="art-text-side">
+      <div class="art-medium-tag rv">Photography / Ink / Gold Leaf, 2023</div>
+      <h2 class="art-title rv rv-d1">Chromatic <em>Dreams</em></h2>
+      <div class="art-artist rv rv-d1">Marcus Chen · Tokyo, Japan</div>
+      <p class="art-body rv rv-d2">Marcus Chen photographs flowers the way war photographers document conflict — with urgency and proximity. This triptych of extreme close-up botanical studies was shot in the abandoned greenhouses of a decommissioned botanical garden in Osaka, where self-seeding flowers had created an uncontrolled explosion of color untouched for over a decade.</p>
+      <span class="art-pullquote rv rv-d2">"Nature doesn't need curators. Left alone, it creates exhibitions more beautiful than anything we could plan."</span>
+      <p class="art-body rv rv-d2">Each print was worked over with calligraphy brushes and 24-karat gold leaf — not as decoration, but as punctuation. Each gold fragment marks a point where Chen felt the photograph alone wasn't enough.</p>
+      <div class="art-details rv rv-d2">
+        <div class="art-detail"><span class="art-detail-label">Dimensions</span><span class="art-detail-value">90 × 120 cm (×3)</span></div>
+        <div class="art-detail"><span class="art-detail-label">Year</span><span class="art-detail-value">2023</span></div>
+        <div class="art-detail"><span class="art-detail-label">Edition</span><span class="art-detail-value">1 of 7</span></div>
+        <div class="art-detail"><span class="art-detail-label">Status</span><span class="art-detail-value">Available</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ARTWORK 6 ========== -->
+<section class="art-section" id="ephemeral-bonds">
+  <div class="art-inner">
+    <div class="art-img-side rv" onclick="openLb('image/index16.jpg')">
+      <img src="image/index16.jpg" alt="Ephemeral Bonds">
+      <div class="art-img-overlay"></div>
+      <div class="art-img-zoom"><span>⛶</span></div>
+      <div class="art-num">06</div>
+    </div>
+    <div class="art-text-side">
+      <div class="art-medium-tag rv">AI + Gold Leaf on Washi, 2024</div>
+      <h2 class="art-title rv rv-d1">Ephemeral <em>Bonds</em></h2>
+      <div class="art-artist rv rv-d1">Anika Petrov · Berlin, Germany</div>
+      <p class="art-body rv rv-d2">Petrov trained a neural network on 200,000 images of human hands — touching, reaching, holding, releasing. She then asked it to generate connections that don't exist: hands reaching across impossible distances, fingers intertwining with light. The machine hallucinated bonds between bodies that have never met.</p>
+      <span class="art-pullquote rv rv-d2">"The machine doesn't understand love. But it understands patterns. And love, at its core, is just a pattern the universe keeps repeating."</span>
+      <p class="art-body rv rv-d2">Printed on 400-year-old handmade washi paper and painted over with gold leaf and sumi ink. The complete series sold out at Art Basel Miami and received the Baloise Art Prize.</p>
+      <div class="art-details rv rv-d2">
+        <div class="art-detail"><span class="art-detail-label">Dimensions</span><span class="art-detail-value">60 × 80 cm (×12)</span></div>
+        <div class="art-detail"><span class="art-detail-label">Year</span><span class="art-detail-value">2024</span></div>
+        <div class="art-detail"><span class="art-detail-label">Edition</span><span class="art-detail-value">1 of 1 each</span></div>
+        <div class="art-detail"><span class="art-detail-label">Status</span><span class="art-detail-value">Private Collection</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ARTWORK 7 (EXTRA — NOT ON HOMEPAGE) ========== -->
+<section class="art-section" id="gravity-lament">
+  <div class="art-inner">
+    <div class="art-img-side rv" onclick="openLb('image/index7.jpg')">
+      <img src="image/index7.jpg" alt="Gravity's Lament">
+      <div class="art-img-overlay"></div>
+      <div class="art-img-zoom"><span>⛶</span></div>
+      <div class="art-num">07</div>
+    </div>
+    <div class="art-text-side">
+      <div class="art-medium-tag rv">Kinetic Sculpture, 2024</div>
+      <h2 class="art-title rv rv-d1">Gravity's <em>Lament</em></h2>
+      <div class="art-artist rv rv-d1">Kofi Mensah · Accra, Ghana</div>
+      <p class="art-body rv rv-d2">A seventeen-foot kinetic sculpture built entirely from discarded materials — shipyard chains, burnt-out motorcycle engines, copper wiring from demolished colonial buildings. It sways with the wind, its rusted limbs groaning in what Mensah describes as "the earth trying to sing through the things we've thrown away."</p>
+      <span class="art-pullquote rv rv-d2">"I don't create art from nothing. I listen to what's already been abandoned and give it permission to speak."</span>
+      <p class="art-body rv rv-d2">Installed permanently on the Accra waterfront. Fishermen leave offerings at its base. At sunset, when the Atlantic light hits oxidized metal, the entire structure glows like an ember.</p>
+      <div class="art-details rv rv-d2">
+        <div class="art-detail"><span class="art-detail-label">Dimensions</span><span class="art-detail-value">520 × 310 cm</span></div>
+        <div class="art-detail"><span class="art-detail-label">Year</span><span class="art-detail-value">2024</span></div>
+        <div class="art-detail"><span class="art-detail-label">Edition</span><span class="art-detail-value">Unique</span></div>
+        <div class="art-detail"><span class="art-detail-label">Status</span><span class="art-detail-value">Permanent Install</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ARTWORK 8 (EXTRA) ========== -->
+<section class="art-section" id="synaptic-bloom">
+  <div class="art-inner">
+    <div class="art-img-side rv" onclick="openLb('image/index5.jpg')">
+      <img src="image/index5.jpg" alt="Synaptic Bloom">
+      <div class="art-img-overlay"></div>
+      <div class="art-img-zoom"><span>⛶</span></div>
+      <div class="art-num">08</div>
+    </div>
+    <div class="art-text-side">
+      <div class="art-medium-tag rv">Generative AI × Human, 2025</div>
+      <h2 class="art-title rv rv-d1">Synaptic <em>Bloom</em></h2>
+      <div class="art-artist rv rv-d1">Anika Petrov · Berlin, Germany</div>
+      <p class="art-body rv rv-d2">Petrov fed a neural network 40,000 photographs of dying flowers and asked: "What does beauty look like in the moment it stops trying?" Twelve generative images emerged — somewhere between photography and hallucination — then printed on handmade washi paper and painted over with gold leaf and ink.</p>
+      <span class="art-pullquote rv rv-d2">"The AI didn't understand death. But it understood transformation. And that was enough."</span>
+      <p class="art-body rv rv-d2">The series sold out in eleven minutes at Art Basel. Three collectors wept at the preview. Petrov herself has never explained why she chose dying flowers. She says the work already did.</p>
+      <div class="art-details rv rv-d2">
+        <div class="art-detail"><span class="art-detail-label">Dimensions</span><span class="art-detail-value">50 × 70 cm (×12)</span></div>
+        <div class="art-detail"><span class="art-detail-label">Year</span><span class="art-detail-value">2025</span></div>
+        <div class="art-detail"><span class="art-detail-label">Edition</span><span class="art-detail-value">1 of 1 each</span></div>
+        <div class="art-detail"><span class="art-detail-label">Status</span><span class="art-detail-value">Sold Out</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ARTWORK 9 (EXTRA) ========== -->
+<section class="art-section" id="nocturnal-pulse">
+  <div class="art-inner">
+    <div class="art-img-side rv" onclick="openLb('image/index4.jpg')">
+      <img src="image/index4.jpg" alt="Nocturnal Pulse">
+      <div class="art-img-overlay"></div>
+      <div class="art-img-zoom"><span>⛶</span></div>
+      <div class="art-num">09</div>
+    </div>
+    <div class="art-text-side">
+      <div class="art-medium-tag rv">Neon / Glass / Steel, 2023</div>
+      <h2 class="art-title rv rv-d1">Nocturnal <em>Pulse</em></h2>
+      <div class="art-artist rv rv-d1">Yuki Tanaka · Osaka, Japan</div>
+      <p class="art-body rv rv-d2">Yuki Tanaka spent three years learning the dying art of neon bending from the last master craftsman in Osaka's Shinsekai district. "Nocturnal Pulse" is a room-sized installation of hand-bent neon tubes suspended within a cage of blackened steel and mirrored glass. The tubes pulse at a frequency matched to the average human resting heart rate — 72 beats per minute.</p>
+      <span class="art-pullquote rv rv-d2">"Neon is the most honest light. It doesn't pretend to be natural. It announces itself as artificial and dares you to find it beautiful anyway."</span>
+      <p class="art-body rv rv-d2">Visitors report an involuntary sense of calm upon entering the space, as if the installation is slowly synchronizing their nervous system to its rhythm. The mirrored walls create infinite reflections, transforming a finite number of tubes into what appears to be an endless luminous heartbeat stretching into eternity.</p>
+      <div class="art-details rv rv-d2">
+        <div class="art-detail"><span class="art-detail-label">Dimensions</span><span class="art-detail-value">Room-sized</span></div>
+        <div class="art-detail"><span class="art-detail-label">Year</span><span class="art-detail-value">2023</span></div>
+        <div class="art-detail"><span class="art-detail-label">Edition</span><span class="art-detail-value">Unique</span></div>
+        <div class="art-detail"><span class="art-detail-label">Status</span><span class="art-detail-value">Available</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ARTWORK 10 (EXTRA) ========== -->
+<section class="art-section" id="cathedral-forgotten">
+  <div class="art-inner">
+    <div class="art-img-side rv" onclick="openLb('image/index6.jpg')">
+      <img src="image/index6.jpg" alt="Cathedral of the Forgotten">
+      <div class="art-img-overlay"></div>
+      <div class="art-img-zoom"><span>⛶</span></div>
+      <div class="art-num">10</div>
+    </div>
+    <div class="art-text-side">
+      <div class="art-medium-tag rv">Mixed Media Installation, 2024</div>
+      <h2 class="art-title rv rv-d1">Cathedral <em>of the Forgotten</em></h2>
+      <div class="art-artist rv rv-d1">Marcus Chen · Tokyo, Japan</div>
+      <p class="art-body rv rv-d2">Thousands of origami cranes, each folded from discarded love letters collected from flea markets across Japan, hang suspended in a decommissioned Tokyo print house. Infrared sensors trigger faint audio — fragments of the letters whispered in voices that belong to no one. The piece has made grown men weep and children laugh.</p>
+      <span class="art-pullquote rv rv-d2">"Every letter was a promise someone couldn't keep. I wanted to give those words a place to rest."</span>
+      <p class="art-body rv rv-d2">Visitors walk beneath a ceiling of abandoned devotion, their footsteps echoing against concrete floors. Chen says both the tears and the laughter are the correct response. The installation is scheduled for a permanent home at the Mori Art Museum in 2026.</p>
+      <div class="art-details rv rv-d2">
+        <div class="art-detail"><span class="art-detail-label">Dimensions</span><span class="art-detail-value">Floor installation</span></div>
+        <div class="art-detail"><span class="art-detail-label">Year</span><span class="art-detail-value">2024</span></div>
+        <div class="art-detail"><span class="art-detail-label">Edition</span><span class="art-detail-value">Unique</span></div>
+        <div class="art-detail"><span class="art-detail-label">Status</span><span class="art-detail-value">On Exhibition</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== ECLIPSE SEPARATOR ====== -->
+<div class="eclipse-separator"></div>
+
+<!-- ====== COLLECTION: ECLIPSE ====== -->
+<div class="eclipse" id="eclipse">
+
+  <!-- ECLIPSE INTRO -->
+  <div class="eclipse-intro rv">
+    <span class="eclipse-eyebrow">A Curated Sub-Collection</span>
+    <h2 class="eclipse-main-title">
+      ECLIPSE
+      <em>by Umbra Studios</em>
+    </h2>
+    <div class="eclipse-byline">Collection : Eclipse · 2025</div>
+    <p class="eclipse-manifesto">
+      <strong>ECLIPSE</strong> is a meditation on silence, space, and balance. Rooted in minimalism, the collection explores the quiet tension between light and shadow — where form becomes emotion and absence becomes presence. Each piece is deliberately restrained, inviting <strong>contemplation</strong> rather than attention.<br><br>
+      Created under the artistic direction of Umbra Studios, the works reflect a philosophy of reduction — removing the unnecessary to reveal something deeper, more enduring.
+    </p>
+  </div>
+
+  <div class="eclipse-divider"><div class="eclipse-divider-line"></div></div>
+
+  <!-- ===== SOLITUDE ===== -->
+  <div class="eclipse-piece rv" id="eclipse-solitude">
+    <div class="eclipse-img">
+      <div class="eclipse-img-num">I</div>
+      <div class="eclipse-img-frame" onclick="openLb(this.querySelector('img').src.replace('w=800','w=1920'))">
+        <!-- REPLACE src with your image -->
+        <img src="image/solitude.jpeg" alt="Solitude">
+        <div class="ez-hint"><span>⛶</span></div>
+      </div>
+    </div>
+    <div class="eclipse-text">
+      <div class="eclipse-piece-label rv">Eclipse · Piece I of IV</div>
+      <h3 class="eclipse-piece-title rv rv-d1">SOLITUDE</h3>
+      <div class="eclipse-piece-sub rv rv-d1">Silence as Clarity</div>
+      <p class="eclipse-piece-body rv rv-d2">
+        A solitary crescent cuts through darkness, suspended above distant, fading terrain. <strong>Solitude</strong> captures the stillness of isolation — not as emptiness, but as clarity. It reflects the artist's belief that distance sharpens perception.<br><br>
+        There is no loneliness here. Only the sharpened awareness that comes from standing far enough away from the noise to finally hear your own thoughts. The crescent doesn't illuminate the landscape below — it simply acknowledges that the landscape exists, and that seeing it requires the courage to stand alone.
+      </p>
+      <div class="eclipse-piece-details rv rv-d2">
+        <div class="eclipse-piece-detail"><span class="edl">Medium</span><span class="edv">Digital Composition</span></div>
+        <div class="eclipse-piece-detail"><span class="edl">Dimensions</span><span class="edv">80 × 100 cm</span></div>
+        <div class="eclipse-piece-detail"><span class="edl">Year</span><span class="edv">2025</span></div>
+        <div class="eclipse-piece-detail"><span class="edl">Status</span><span class="edv">Available</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="eclipse-divider"><div class="eclipse-divider-line"></div></div>
+
+  <!-- ===== DUSK ===== -->
+  <div class="eclipse-piece rv" id="eclipse-dusk">
+    <div class="eclipse-img">
+      <div class="eclipse-img-num">II</div>
+      <div class="eclipse-img-frame" onclick="openLb(this.querySelector('img').src.replace('w=800','w=1920'))">
+        <!-- REPLACE src with your image -->
+        <img src="image/dusk.jpeg" alt="Dusk">
+        <div class="ez-hint"><span>⛶</span></div>
+      </div>
+    </div>
+    <div class="eclipse-text">
+      <div class="eclipse-piece-label rv">Eclipse · Piece II of IV</div>
+      <h3 class="eclipse-piece-title rv rv-d1">DUSK</h3>
+      <div class="eclipse-piece-sub rv rv-d1">The Space Between Endings</div>
+      <p class="eclipse-piece-body rv rv-d2">
+        A blackened sun rests at the edge of an endless sea, its light barely breaking through. <strong>Dusk</strong> represents transition — the quiet moment between endings and beginnings. The artist frames time here as something fluid, not fixed.<br><br>
+        This is the hour when the world exhales. The sun doesn't set dramatically here — it surrenders, slowly, without protest. The sea receives it without celebration. What remains is the most honest light of the day: the light that has stopped performing and simply exists, briefly, before disappearing entirely.
+      </p>
+      <div class="eclipse-piece-details rv rv-d2">
+        <div class="eclipse-piece-detail"><span class="edl">Medium</span><span class="edv">Digital Composition</span></div>
+        <div class="eclipse-piece-detail"><span class="edl">Dimensions</span><span class="edv">80 × 100 cm</span></div>
+        <div class="eclipse-piece-detail"><span class="edl">Year</span><span class="edv">2025</span></div>
+        <div class="eclipse-piece-detail"><span class="edl">Status</span><span class="edv">Available</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="eclipse-divider"><div class="eclipse-divider-line"></div></div>
+
+  <!-- ===== ORBIT ===== -->
+  <div class="eclipse-piece rv" id="eclipse-orbit">
+    <div class="eclipse-img">
+      <div class="eclipse-img-num">III</div>
+      <div class="eclipse-img-frame" onclick="openLb(this.querySelector('img').src.replace('w=800','w=1920'))">
+        <!-- REPLACE src with your image -->
+        <img src="image/orbit.jpeg" alt="Orbit">
+        <div class="ez-hint"><span>⛶</span></div>
+      </div>
+    </div>
+    <div class="eclipse-text">
+      <div class="eclipse-piece-label rv">Eclipse · Piece III of IV</div>
+      <h3 class="eclipse-piece-title rv rv-d1">ORBIT</h3>
+      <div class="eclipse-piece-sub rv rv-d1">Harmony Within Proximity</div>
+      <p class="eclipse-piece-body rv rv-d2">
+        Two forms intersect in silent motion. <strong>Orbit</strong> speaks to connection without chaos — relationships defined by balance, not collision. The overlapping shapes echo the artist's exploration of harmony within proximity.<br><br>
+        Neither form dominates. Neither retreats. They exist in a state of perpetual negotiation — close enough to influence each other's trajectory, distant enough to maintain their own identity. It is the visual equivalent of two people who have learned that love is not fusion, but the grace of orbiting at exactly the right distance.
+      </p>
+      <div class="eclipse-piece-details rv rv-d2">
+        <div class="eclipse-piece-detail"><span class="edl">Medium</span><span class="edv">Digital Composition</span></div>
+        <div class="eclipse-piece-detail"><span class="edl">Dimensions</span><span class="edv">80 × 100 cm</span></div>
+        <div class="eclipse-piece-detail"><span class="edl">Year</span><span class="edv">2025</span></div>
+        <div class="eclipse-piece-detail"><span class="edl">Status</span><span class="edv">Available</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="eclipse-divider"><div class="eclipse-divider-line"></div></div>
+
+  <!-- ===== ALIGNMENT ===== -->
+  <div class="eclipse-piece rv" id="eclipse-alignment">
+    <div class="eclipse-img">
+      <div class="eclipse-img-num">IV</div>
+      <div class="eclipse-img-frame" onclick="openLb(this.querySelector('img').src.replace('w=800','w=1920'))">
+        <!-- REPLACE src with your image -->
+        <img src="image/alignment.jpeg" alt="Alignment">
+        <div class="ez-hint"><span>⛶</span></div>
+      </div>
+    </div>
+    <div class="eclipse-text">
+      <div class="eclipse-piece-label rv">Eclipse · Piece IV of IV</div>
+      <h3 class="eclipse-piece-title rv rv-d1">ALIGNMENT</h3>
+      <div class="eclipse-piece-sub rv rv-d1">Order Without Force</div>
+      <p class="eclipse-piece-body rv rv-d2">
+        Three bodies arranged with intention — nothing more, nothing less. <strong>Alignment</strong> is about order, structure, and the unseen forces that bring elements into coherence. It reflects the artist's disciplined approach to composition.<br><br>
+        There is no accident here. Each element earns its position through relationship to the others. Remove one and the composition collapses. Add one and it suffocates. This is the mathematics of restraint — the understanding that perfection is not when there is nothing left to add, but when there is nothing left to take away.
+      </p>
+      <div class="eclipse-piece-details rv rv-d2">
+        <div class="eclipse-piece-detail"><span class="edl">Medium</span><span class="edv">Digital Composition</span></div>
+        <div class="eclipse-piece-detail"><span class="edl">Dimensions</span><span class="edv">80 × 100 cm</span></div>
+        <div class="eclipse-piece-detail"><span class="edl">Year</span><span class="edv">2025</span></div>
+        <div class="eclipse-piece-detail"><span class="edl">Status</span><span class="edv">Available</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ECLIPSE CLOSING QUOTE -->
+  <div class="eclipse-closing rv">
+    <p class="eclipse-closing-text">"Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away."</p>
+    <div class="eclipse-closing-attr">— Antoine de Saint-Exupéry · The Guiding Principle of Eclipse</div>
+  </div>
+
+</div>
+
+<div class="eclipse-separator"></div>
+<!-- CTA -->
+<section class="coll-cta">
+  <h2>Interested in a Piece?</h2>
+  <p>For acquisition inquiries, exhibition loans, or high-resolution imagery, our collections team is ready to assist.</p>
+  <div class="cta-btns">
+    <a href="index.html#contact" class="btn btn-fill">Inquire Now →</a>
+    <a href="index.html" class="btn btn-ghost">Back to Home</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer"><span class="footer-copy">© 2025 Umbra Studios. All rights reserved.</span></footer>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" onclick="if(event.target===this)closeLb()">
+  <div class="lb-esc"><kbd>ESC</kbd> to close</div>
+  <button class="lb-close" onclick="closeLb()">✕</button>
+  <img id="lb-img" src="" alt="Full artwork view">
+</div>
+
+<script>
+/* LIGHTBOX */
+function openLb(s){var l=document.getElementById('lb');document.getElementById('lb-img').src=s;l.classList.add('open');document.body.style.overflow='hidden'}
+function closeLb(){var l=document.getElementById('lb');l.classList.remove('open');document.body.style.overflow='';setTimeout(function(){document.getElementById('lb-img').src=''},500)}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLb()});
+(function(){var l=document.getElementById('lb'),sy=0;l.addEventListener('touchstart',function(e){sy=e.touches[0].clientY},{passive:!0});l.addEventListener('touchend',function(e){if(e.changedTouches[0].clientY-sy>80)closeLb()},{passive:!0})})();
+
+/* REVEAL */
+var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('vis')})},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(function(el){obs.observe(el)});
+
+/* HAMBURGER */
+var ham=document.getElementById('ham'),nl=document.getElementById('nav-links');
+ham.addEventListener('click',function(){ham.classList.toggle('on');nl.classList.toggle('open')});
+nl.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){ham.classList.remove('on');nl.classList.remove('open')})});
+
+/* SIDE NAV — ACTIVE STATE ON SCROLL */
+var sections=document.querySelectorAll('.art-section');
+var dots=document.querySelectorAll('.side-nav-dot');
+
+var sideObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting){
+      var id=entry.target.id;
+      dots.forEach(function(d){
+        d.classList.toggle('active',d.getAttribute('href')==='#'+id);
+      });
+    }
+  });
+},{threshold:0.3,rootMargin:'-20% 0px -50% 0px'});
+
+sections.forEach(function(s){sideObs.observe(s)});
+
+/* SMOOTH SCROLL FOR SIDE NAV */
+document.querySelectorAll('.side-nav-dot, .pg-hero-back, a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    var href=this.getAttribute('href');
+    if(href&&href.startsWith('#')){
+      e.preventDefault();
+      var t=document.querySelector(href);
+      if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  });
+});
+</script>
+</body>
+</html>
